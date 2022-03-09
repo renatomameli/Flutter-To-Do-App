@@ -38,9 +38,9 @@ List<Icon> getTrueOrFalseIcons(Habit habit){
   List<Icon> icons = [];
   for(int i=0; i<4; i++){
     if(habit.successAtDate[nowMinusTwoDays.add(Duration(days: i)).toIso8601String().substring(0,10)] == true){
-      icons.add(Icon(Icons.check));
+      icons.add(Icon(Icons.check, color: Colors.green,));
     } else {
-      icons.add(Icon(Icons.clear));
+      icons.add(Icon(Icons.clear, color: Colors.red));
     }
   }
   return icons;
