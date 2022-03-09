@@ -1,48 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:habit_changer/HeaderCard.dart';
 import 'habit.dart';
 
-List<Habit> habits = [Habit("Meditate", {'2022-03-01': true, '2022-03-09': true})];
-final DateTime now = DateTime.now();
-List<String> days = ["Sa", "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", "Mo"];
-List<Card> habitCards = [new Card()];
+List<Habit> dummyHabits = [Habit("Meditate", {'2022-03-01': true, '2022-03-09': true}),
+  Habit("Train", {'2022-03-08': true, '2022-03-09': true}),
+  Habit("Cold Shower", {}),
+  Habit("Yoga", {'2022-03-08': true, '2022-03-09': true, '2022-03-10': true, '2022-03-07': true}),
+];
+
+final DateTime nowMinusTwoDays = DateTime.now().subtract(Duration(days:2));
 
 Widget buildBody(){
   return ListView(
-    children: <Widget>[
-      Card(child: ListTile(
-        trailing: Wrap(
-          spacing: 27, // space between two icons
-          children: <Widget>[
-            Text(getFourRelevantTextDays().first), // icon-1
-            Text(getFourRelevantTextDays()[1]), // icon-2
-            Text(getFourRelevantTextDays()[2]), // icon-1
-            Text(getFourRelevantTextDays().last), // icon-2
-          ],
-        ),
-      ),
-      ),
-      Card(child: ListTile(
-        title: Text(habits[0].name),
-        trailing: Wrap(
-          spacing: 19.5,
-          children: <Widget>[
-            Icon(Icons.check),
-            Icon(Icons.check),
-            Icon(Icons.check),
-            Icon(Icons.check),
-          ],
-        ),
-      ))
-    ]
+    children: buildCards()
   );
 }
 
-List<String> getFourRelevantTextDays(){
-  int positionInDaysList = now.weekday + 2;
-  List <String> a = days.getRange(positionInDaysList -3, positionInDaysList + 1).toList();
-  return a;
+List<Card> buildCards(){
+  List<Card> cards = [HeaderCard()];
+
+  dummyHabits.forEach((element) {
+    cards.add(
+      new Card(child: ListTile(
+        title: Text(element.name),
+        trailing: Wrap(
+          spacing: 19.5,
+          children: getTrueOrFalseIcons(element)
+        )
+      )
+      )
+    );
+  });
+  return cards;
 }
 
-
-
+List<Icon> getTrueOrFalseIcons(Habit habit){
+  List<Icon> icons = [];
+  for(int i=0; i<4; i++){
+    if(habit.successAtDate[nowMinusTwoDays.add(Duration(days: i)).toIso8601String().substring(0,10)] == true){
+      icons.add(Icon(Icons.check));
+    } else {
+      icons.add(Icon(Icons.clear));
+    }
+  }
+  return icons;
+}
