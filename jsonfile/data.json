@@ -1,0 +1,20 @@
+{
+  "habit": {
+    "name": "Train",
+    "description": "Lift Weights or use body wheight",
+    "successAtDate": [
+      {
+        "date": "2022-03-10",
+        "value": true
+      },
+      {
+        "date": "2022-03-09",
+        "value": true
+      },
+      {
+        "date": "2022-03-11",
+        "value": true
+      }
+    ]
+  }
+}

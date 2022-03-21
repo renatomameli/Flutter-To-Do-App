@@ -1,0 +1,12 @@
+{
+  "habits": [{
+    "id": 1,
+    "name": "Train",
+    "description": "Lift Weights or use body wheight",
+    "successAtDate": [
+        "2022-03-10",
+        "2022-03-09",
+        "2022-03-11"
+    ]
+  }]
+}

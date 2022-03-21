@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:habit_changer/add_habit.dart';
 import 'package:habit_changer/body.dart';
+import 'file_importer.dart';
 import 'nav_bar.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  List<String> habits = ["Train", "Meditate"];
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

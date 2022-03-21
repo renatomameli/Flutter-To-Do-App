@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:habit_changer/HeaderCard.dart';
+import 'package:habit_changer/file_importer.dart';
 import 'habit.dart';
 
-List<Habit> dummyHabits = [Habit("Meditate", {'2022-03-01': true, '2022-03-09': true}),
-  Habit("Train", {'2022-03-08': true, '2022-03-09': true}),
-  Habit("Cold Shower", {}),
-  Habit("Yoga", {'2022-03-08': true, '2022-03-09': true, '2022-03-10': true, '2022-03-07': true}),
+List<Habit> dummyHabits = [Habit(1, "Meditate", "Be careful", ['2022-03-01', '2022-03-09']),
+  Habit(2, "Train", "Be careful", ['2022-03-08', '2022-03-09']),
+  Habit(3, "Cold Shower", "Be careful", []),
+  Habit(4, "Yoga" , "Be careful", ['2022-03-08', '2022-03-09', '2022-03-10', '2022-03-07', '2022-03-11']),
 ];
 
 final DateTime nowMinusTwoDays = DateTime.now().subtract(Duration(days:2));
 
-Widget buildBody(){
-  return ListView(
+Widget buildBody() {
+    return ListView(
     children: buildCards()
   );
 }
@@ -37,7 +38,7 @@ List<Card> buildCards(){
 List<Icon> getTrueOrFalseIcons(Habit habit){
   List<Icon> icons = [];
   for(int i=0; i<4; i++){
-    if(habit.successAtDate[nowMinusTwoDays.add(Duration(days: i)).toIso8601String().substring(0,10)] == true){
+    if(habit.successAtDate.contains(nowMinusTwoDays.add(Duration(days: i)).toIso8601String().substring(0,10))){
       icons.add(Icon(Icons.check, color: Colors.green,));
     } else {
       icons.add(Icon(Icons.clear, color: Colors.red));
@@ -45,3 +46,4 @@ List<Icon> getTrueOrFalseIcons(Habit habit){
   }
   return icons;
 }
+
