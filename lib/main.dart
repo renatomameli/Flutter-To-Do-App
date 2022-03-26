@@ -3,7 +3,7 @@ import 'package:habit_changer/AddHabitDialog.dart';
 
 import 'Constants.dart';
 import 'HabitStorage.dart';
-import 'body.dart';
+import 'MainBody.dart';
 import 'nav_bar.dart';
 
 void main() {
