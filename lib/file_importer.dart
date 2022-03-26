@@ -2,40 +2,36 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
-Future<String> get _localPath async {
-  final directory = await getApplicationDocumentsDirectory();
+class FileImporter {
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
 
-  return directory.path;
-}
+    return directory.path;
+  }
 
-Future<String> foo() async {
-  final directory = await getApplicationDocumentsDirectory();
-  print("Hallo" + directory.path);
-  return directory.path;
-}
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/counter.txt');
+  }
 
-Future<File> get _localFile async {
-  final path = await _localPath;
-  return File('$path/counter.txt');
-}
+  Future<int> readCounter() async {
+    try {
+      final file = await _localFile;
 
-Future<File> writeCounter(int counter) async {
-  final file = await _localFile;
+      // Read the file
+      final contents = await file.readAsString();
 
-  // Write the file
-  return file.writeAsString('$counter');
-}
+      return int.parse(contents);
+    } catch (e) {
+      // If encountering an error, return 0
+      return 0;
+    }
+  }
 
-Future<int> readCounter() async {
-  try {
+  Future<File> writeCounter(int counter) async {
     final file = await _localFile;
 
-    // Read the file
-    final contents = await file.readAsString();
-
-    return int.parse(contents);
-  } catch (e) {
-    // If encountering an error, return 0
-    return 0;
+    // Write the file
+    return file.writeAsString('$counter');
   }
 }

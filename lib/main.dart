@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:habit_changer/add_habit.dart';
+import 'package:habit_changer/AddHabitRoute.dart';
 import 'package:habit_changer/body.dart';
-import 'file_importer.dart';
+import 'HabitStorage.dart';
 import 'nav_bar.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,16 +30,17 @@ class MyApp extends StatelessWidget {
                   padding: EdgeInsets.only(right: 20.0),
                   child: GestureDetector(
                     onTap: () {
-                      addHabit();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AddHabitRoute()),
+                      );
                     },
-                    child: Icon(
-                        Icons.add
+                    child: Icon(Icons.add),
                     ),
                   )
-              ),
             ],
           ),
-          body: buildBody(),
+          body: HabitBody(HabitStorage()),
         ));
   }
 }
