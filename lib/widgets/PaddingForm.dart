@@ -6,11 +6,13 @@ class PaddingForm extends StatelessWidget {
     required this.hintText,
     required this.newHabitFormMap,
     required this.valueField,
+    required this.allowEmptyField
   }) : super(key: key);
 
   final String hintText;
   final Map<String, String> newHabitFormMap;
   final String valueField;
+  final bool allowEmptyField;
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +23,10 @@ class PaddingForm extends StatelessWidget {
           hintText: this.hintText,
         ),
         validator: (String? value) {
-          if (value == null || value.isEmpty) {
+          if (!allowEmptyField && (value == null || value.isEmpty)) {
             return 'Please enter some text';
           }
-          this.newHabitFormMap.putIfAbsent(this.valueField, () => value);
+          this.newHabitFormMap.putIfAbsent(this.valueField, () => value!);
           return null;
         },
       ),

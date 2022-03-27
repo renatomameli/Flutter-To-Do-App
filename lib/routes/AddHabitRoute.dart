@@ -42,9 +42,9 @@ class _MyForm extends State<_MyStatefulWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          PaddingForm(newHabitFormMap: newHabitFormMap, hintText: 'Habit Name', valueField: 'name',),
-          PaddingForm(newHabitFormMap: newHabitFormMap, hintText: 'Question', valueField: 'question',),
-          PaddingForm(newHabitFormMap: newHabitFormMap, hintText: 'Notes (optional)', valueField: 'notes',),
+          PaddingForm(newHabitFormMap: newHabitFormMap, hintText: 'Habit Name', valueField: 'name', allowEmptyField: false),
+          PaddingForm(newHabitFormMap: newHabitFormMap, hintText: 'Question', valueField: 'question', allowEmptyField: false),
+          PaddingForm(newHabitFormMap: newHabitFormMap, hintText: 'Notes (optional)', valueField: 'notes', allowEmptyField: true),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
             child: ElevatedButton(
