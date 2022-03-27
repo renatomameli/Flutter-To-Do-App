@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:habit_changer/routes/AddHabitObviousRoute.dart';
 import 'package:habit_changer/utils/Constants.dart';
-import 'package:habit_changer/model/NewHabitForm.dart';
+import 'package:habit_changer/widgets/PaddingForm.dart';
 
 class AddHabitRoute extends StatelessWidget {
   const AddHabitRoute({Key? key}) : super(key: key);
@@ -33,7 +33,7 @@ class _MyStatefulWidget extends StatefulWidget {
 
 class _MyForm extends State<_MyStatefulWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final NewHabitForm newHabitForm = new NewHabitForm();
+  final Map<String, String> newHabitFormMap = {};
 
   @override
   Widget build(BuildContext context) {
@@ -42,48 +42,9 @@ class _MyForm extends State<_MyStatefulWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Name',
-              ),
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
-                }
-                this.newHabitForm.name = value;
-                return null;
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Question',
-              ),
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
-                }
-                this.newHabitForm.question = value;
-                return null;
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Notes (optional)',
-              ),
-              validator: (String? value) {
-                this.newHabitForm.notes = value!;
-                return null;
-              },
-            ),
-          ),
+          PaddingForm(newHabitFormMap: newHabitFormMap, hintText: 'Habit Name', valueField: 'name',),
+          PaddingForm(newHabitFormMap: newHabitFormMap, hintText: 'Question', valueField: 'question',),
+          PaddingForm(newHabitFormMap: newHabitFormMap, hintText: 'Notes (optional)', valueField: 'notes',),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
             child: ElevatedButton(
@@ -93,7 +54,7 @@ class _MyForm extends State<_MyStatefulWidget> {
 
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddHabitObviousRoute(newHabitForm: newHabitForm)));
+                    MaterialPageRoute(builder: (context) => AddHabitObviousRoute(newHabitFormMap: newHabitFormMap)));
                 }
               },
               child: const Text('Continue'),
@@ -104,3 +65,5 @@ class _MyForm extends State<_MyStatefulWidget> {
     );
   }
 }
+
+

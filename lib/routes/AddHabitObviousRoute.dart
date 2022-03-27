@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:habit_changer/model/NewHabitForm.dart';
 
 class AddHabitObviousRoute extends StatelessWidget{
-  final NewHabitForm newHabitForm;
-  const AddHabitObviousRoute({Key? key, required this.newHabitForm}) : super(key: key);
+  final Map<String, String> newHabitFormMap;
+  const AddHabitObviousRoute({Key? key, required this.newHabitFormMap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,20 +37,6 @@ class _MyForm extends State<_MyStatefulWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Name',
-              ),
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
-                }
-                return null;
-              },
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
             child: TextFormField(
@@ -110,3 +95,4 @@ class _MyForm extends State<_MyStatefulWidget> {
     );
   }
 }
+
