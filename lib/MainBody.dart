@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:habit_changer/HeaderCard.dart';
+import 'package:habit_changer/widgets/HeaderCard.dart';
 import 'HabitStorage.dart';
-import 'habit.dart';
+import 'model/Habit.dart';
 
 List<Habit> dummyHabits = [
   Habit(1, "Meditate", "Be careful", ['2022-03-01', '2022-03-09']),

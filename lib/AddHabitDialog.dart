@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'AddHabitRoute.dart';
+import 'routes/AddHabitRoute.dart';
 
 class AddHabitDialog {
   Widget buildPopupDialog(BuildContext context) {
