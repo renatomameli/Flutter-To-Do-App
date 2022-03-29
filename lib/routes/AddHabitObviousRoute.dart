@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:habit_changer/routes/AddHabitAttractiveRoute.dart';
+import 'package:habit_changer/utils/Constants.dart';
+import 'package:habit_changer/widgets/PaddingStandard.dart';
 
 class AddHabitObviousRoute extends StatelessWidget {
   final Map<String, String> newHabitFormMap;
@@ -37,6 +40,7 @@ class _MyForm extends State<_MyStatefulWidget> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Map<String, String> newHabitFormMap;
+  final Map<String, String> newHabitObviousFormMap = {};
 
   @override
   Widget build(BuildContext context) {
@@ -45,65 +49,89 @@ class _MyForm extends State<_MyStatefulWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          PaddingStandard(
               child: Text("1. Implementation Intention:")),
-          Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0),
+          PaddingStandard(
               child: Row(
                 children: [
                   Text("I will make the habit: \"" +
-                      newHabitFormMap["name"].toString() + "\" at "),
+                      newHabitFormMap["name"].toString() +
+                      "\" at "),
                   Expanded(
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: '01:00',
-                        ),
-                        validator: (String? value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: '01:00',
                       ),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        newHabitObviousFormMap.putIfAbsent("time", () => value);
+                        return null;
+                      },
+                    ),
                   ),
-
                 ],
               )),
-          Padding(
-              padding:
-              const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-              child:
-              Row(children: [
-                Text("in "),
-                Expanded(
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'my bathroom',
+          PaddingStandard(
+              child: Row(
+                children: [
+                  Text("in "),
+                  Expanded(
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'my bathroom',
+                      ),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        newHabitObviousFormMap.putIfAbsent(
+                            "habitAfter", () => value);
+                        return null;
+                      },
                     ),
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
-                      }
-                      return null;
-                    },
                   ),
-                ),
-          ],)
+                ],
+              )),
+          PaddingStandard(
+              child: Text("2. Habitual coupling:")),
+          PaddingStandard(
+              child: Row(
+                children: [
+                  Text("After the habit: \"" +
+                      newHabitFormMap["name"].toString() +
+                      "\" I do the habit: "),
+                  Expanded(
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'e.g. Meditation',
+                      ),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              )),
 
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          /*
+           * Continue
+           */
+          PaddingStandard(
+              child: Text("3. Make triggers obvious:")),
+          Container(),
+          PaddingStandard(
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentContext;
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(builder: (context) => const AddHabitObviousRoute()));
+                   Navigator.push(
+                       context,
+                       MaterialPageRoute(builder: (context) => AddHabitAttractiveRoute(newHabitObviousFormMap: newHabitObviousFormMap)));
                 }
               },
               child: const Text('Continue'),

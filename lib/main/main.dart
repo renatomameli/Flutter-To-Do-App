@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:habit_changer/AddHabitDialog.dart';
+import 'package:habit_changer/main/AddHabitDialog.dart';
 
-import 'utils/Constants.dart';
-import 'HabitStorage.dart';
-import 'MainBody.dart';
+import '../utils/Constants.dart';
+import '../file-handling/HabitStorage.dart';
+import '../widgets/MainBody.dart';
 import 'nav_bar.dart';
 
 void main() {

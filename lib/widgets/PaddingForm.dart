@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:habit_changer/widgets/PaddingStandard.dart';
 
 class PaddingForm extends StatelessWidget {
   const PaddingForm({
@@ -16,8 +17,7 @@ class PaddingForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+    return PaddingStandard(
       child: TextFormField(
         decoration: InputDecoration(
           hintText: this.hintText,
