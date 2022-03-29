@@ -4,9 +4,10 @@ import 'AddHabitEasyRoute.dart';
 
 class AddHabitAttractiveRoute extends StatelessWidget {
   final Map<String, String> newHabitObviousFormMap;
+  final Map<String, String> triggerStimulusMap;
 
   const AddHabitAttractiveRoute(
-      {Key? key, required this.newHabitObviousFormMap})
+      {Key? key, required this.newHabitObviousFormMap, required this.triggerStimulusMap})
       : super(key: key);
 
   @override
