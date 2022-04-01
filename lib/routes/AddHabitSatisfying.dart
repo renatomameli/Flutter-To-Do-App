@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:habit_changer/widgets/PaddingStandard.dart';
 
 import '../main/main.dart';
 
@@ -40,7 +41,7 @@ class _MyForm extends State<_MyStatefulWidget> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Map<String, String> newHabitFormMap;
-  final Map<String, String> newHabitObviousFormMap = {};
+  final Map<String, String> newHabitSatisfyingFormMap = {};
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +50,20 @@ class _MyForm extends State<_MyStatefulWidget> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 16.0),
-                  child: Text("1. Implementation Intention:")),
-              Padding(
-                padding:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+              PaddingStandard(
+                  child: Text("1. Use a reward as reinforcement:")),
+              PaddingStandard(
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'e.g. Eat a cookie',
+                  ),
+                  validator: (String? value) {
+                    newHabitSatisfyingFormMap.putIfAbsent("reduceEffort", () => value!);
+                    return null;
+                  },
+                ),
+              ),
+              PaddingStandard(
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {

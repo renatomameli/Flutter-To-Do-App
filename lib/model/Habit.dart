@@ -1,21 +1,21 @@
 class Habit {
   final int id;
   final String name;
-  final String description;
+  final String notes;
   final List<String> successAtDate;
 
-  Habit(this.id, this.name, this.description, this.successAtDate);
+  Habit(this.id, this.name, this.notes, this.successAtDate);
 
   Habit.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'],
-        description = json['description'],
+        notes = json['description'],
         successAtDate = json['successAtDate'];
 
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
-    'description': description,
+    'description': notes,
     'successAtDate': successAtDate,
   };
 }

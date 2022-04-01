@@ -45,7 +45,7 @@ class MainRoute extends StatelessWidget {
           )
         ],
       ),
-      body: HabitBody(HabitStorage()),
+      body: HabitBody(),
     );
   }
 }

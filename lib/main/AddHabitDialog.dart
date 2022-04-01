@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:habit_changer/widgets/EvelatedButtonAddHabit.dart';
+import 'package:habit_changer/widgets/ElevatedButtonAddHabit.dart';
 
 import '../routes/AddHabitRoute.dart';
 
@@ -11,9 +11,9 @@ class AddHabitDialog {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              EvelatedButtonAddHabit(
+              ElevatedButtonAddHabit(
                   text: "Build a habit", createPage: AddHabitRoute()),
-              EvelatedButtonAddHabit(
+              ElevatedButtonAddHabit(
                   text: 'Lose or substitute a habit',
                   createPage: AddHabitRoute())
             ]));

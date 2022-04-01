@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 
-class EvelatedButtonAddHabit extends StatelessWidget {
-  EvelatedButtonAddHabit({
+class ElevatedButtonAddHabit extends StatelessWidget {
+  ElevatedButtonAddHabit({
     Key? key,
     required this.createPage, required this.text,
   }) : super(key: key);

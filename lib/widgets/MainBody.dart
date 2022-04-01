@@ -16,9 +16,8 @@ List<Habit> dummyHabits = [
 final DateTime nowMinusTwoDays = DateTime.now().subtract(Duration(days: 2));
 
 class HabitBody extends StatefulWidget {
-  const HabitBody(this.habitStorage);
+  const HabitBody();
 
-  final HabitStorage habitStorage;
 
   @override
   _HabitState createState() => _HabitState();
@@ -26,12 +25,14 @@ class HabitBody extends StatefulWidget {
 
 class _HabitState extends State<HabitBody> {
   String _json = "";
+  late HabitStorage habitStorage = new HabitStorage("");
 
   @override
   void initState() {
     super.initState();
     _createHabit();
-    widget.habitStorage.readHabitJson().then((String value) {
+    habitStorage.setFileName("fileName");
+    habitStorage.readHabitJson().then((String value) {
       setState(() {
         _json = value;
       });
@@ -43,7 +44,7 @@ class _HabitState extends State<HabitBody> {
       _json = "NEW HABIT";
     });
 
-    return widget.habitStorage.writeHabitJson(_json);
+    return habitStorage.writeHabitJson(_json);
   }
 
   @override

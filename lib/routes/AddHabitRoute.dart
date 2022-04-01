@@ -19,7 +19,7 @@ class AddHabitRoute extends StatelessWidget {
               Navigator.pop(context);
             },
           )),
-      body: const _MyStatefulWidget(),
+      body:  SingleChildScrollView(child: const _MyStatefulWidget())
     ));
   }
 }
