@@ -20,8 +20,7 @@ class HabitStorage {
 
   Future<File> writeHabitJson(String habit) async {
     final file = await _localFile;
-    return file.writeAsString(
-        "{\r\n \"habit\": {\r\n   \"name\": \"Train\",\r\n   \"description\": \"Lift Weights or use body wheight\",\r\n   \"data\": [\r\n     {\r\n       \"date\": \"2022-03-10\",\r\n       \"value\": true\r\n     },\r\n     {\r\n       \"date\": \"2022-03-09\",\r\n       \"value\": true\r\n     },\r\n     {\r\n       \"date\": \"2022-03-11\",\r\n       \"value\": true\r\n     }\r\n     ]\r\n }\r\n}");
+    return file.writeAsString(habit);
   }
 
   Future<String> readHabitJson() async {

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:habit_changer/model/build/HabitBuild.dart';
+import 'package:habit_changer/model/build/HabitBuildEasy.dart';
 import 'package:habit_changer/widgets/PaddingStandard.dart';
 
 import 'AddHabitSatisfying.dart';
 
 class AddHabitEasyRoute extends StatelessWidget {
-  final Map<String, String> newHabitAttractiveFormMap;
+  final HabitBuild habitBuild;
 
-  const AddHabitEasyRoute({Key? key, required this.newHabitAttractiveFormMap})
+  const AddHabitEasyRoute({Key? key, required this.habitBuild})
       : super(key: key);
 
   @override
@@ -21,27 +23,27 @@ class AddHabitEasyRoute extends StatelessWidget {
             )),
         body: SingleChildScrollView(
           child: _MyStatefulWidget(
-            newHabitAttractiveFormMap: newHabitAttractiveFormMap,
+            habitBuild: habitBuild,
           ),
         ));
   }
 }
 
 class _MyStatefulWidget extends StatefulWidget {
-  const _MyStatefulWidget({Key? key, required this.newHabitAttractiveFormMap})
+  const _MyStatefulWidget({Key? key, required this.habitBuild})
       : super(key: key);
-  final Map<String, String> newHabitAttractiveFormMap;
+  final HabitBuild habitBuild;
 
   @override
-  State<_MyStatefulWidget> createState() => _MyForm(newHabitAttractiveFormMap);
+  State<_MyStatefulWidget> createState() => _MyForm(habitBuild);
 }
 
 class _MyForm extends State<_MyStatefulWidget> {
-  _MyForm(this.newHabitAttractiveFormMap);
+  _MyForm(this.habitBuild);
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Map<String, String> newHabitAttractiveFormMap;
-  final Map<String, String> newHabitEasyFormMap = {};
+  final HabitBuild habitBuild;
+  final HabitBuildEasy habitBuildEasy = new HabitBuildEasy();
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,7 @@ class _MyForm extends State<_MyStatefulWidget> {
                 hintText: 'e.g. Put weights in front of the bed',
               ),
               validator: (String? value) {
-                newHabitEasyFormMap.putIfAbsent("reduceEffort", () => value!);
+                habitBuildEasy.setEffort(value!);
                 return null;
               },
             ),
@@ -68,7 +70,7 @@ class _MyForm extends State<_MyStatefulWidget> {
                 hintText: 'e.g. Use a workout App',
               ),
               validator: (String? value) {
-                newHabitEasyFormMap.putIfAbsent("technicalSolutions", () => value!);
+                habitBuildEasy.setTechnical(value!);
                 return null;
               },
             ),
@@ -78,11 +80,12 @@ class _MyForm extends State<_MyStatefulWidget> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentContext;
+                  habitBuild.setHabitBuildEasy(habitBuildEasy);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => AddHabitSatisfyingRoute(
-                              newHabitAttractiveFormMap: newHabitEasyFormMap)));
+                              habitBuild: habitBuild)));
                 }
               },
               child: const Text('Continue'),

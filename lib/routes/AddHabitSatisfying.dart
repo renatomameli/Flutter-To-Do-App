@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:habit_changer/model/build/HabitBuild.dart';
+import 'package:habit_changer/model/build/HabitBuildSatisfying.dart';
 import 'package:habit_changer/widgets/PaddingStandard.dart';
 
 import '../main/main.dart';
+import 'StoreHabit.dart';
 
 class AddHabitSatisfyingRoute extends StatelessWidget {
-  final Map<String, String> newHabitAttractiveFormMap;
+  final HabitBuild habitBuild;
 
   const AddHabitSatisfyingRoute(
-      {Key? key, required this.newHabitAttractiveFormMap})
+      {Key? key, required this.habitBuild})
       : super(key: key);
 
   @override
@@ -21,27 +24,27 @@ class AddHabitSatisfyingRoute extends StatelessWidget {
             },
           )),
       body: _MyStatefulWidget(
-        newHabitAttractiveFormMap: newHabitAttractiveFormMap,
+        habitBuild: habitBuild,
       ),
     );
   }
 }
 
 class _MyStatefulWidget extends StatefulWidget {
-  const _MyStatefulWidget({Key? key, required this.newHabitAttractiveFormMap})
+  const _MyStatefulWidget({Key? key, required this.habitBuild})
       : super(key: key);
-  final Map<String, String> newHabitAttractiveFormMap;
+  final HabitBuild habitBuild;
 
   @override
-  State<_MyStatefulWidget> createState() => _MyForm(newHabitAttractiveFormMap);
+  State<_MyStatefulWidget> createState() => _MyForm(habitBuild);
 }
 
 class _MyForm extends State<_MyStatefulWidget> {
-  _MyForm(this.newHabitFormMap);
+  _MyForm(this.habitBuild);
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Map<String, String> newHabitFormMap;
-  final Map<String, String> newHabitSatisfyingFormMap = {};
+  final HabitBuild habitBuild;
+  final HabitBuildSatisfying habitBuildSatisfying = new HabitBuildSatisfying();
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +61,7 @@ class _MyForm extends State<_MyStatefulWidget> {
                     hintText: 'e.g. Eat a cookie',
                   ),
                   validator: (String? value) {
-                    newHabitSatisfyingFormMap.putIfAbsent("reduceEffort", () => value!);
+                    habitBuildSatisfying.setReward(value!);
                     return null;
                   },
                 ),
@@ -68,6 +71,8 @@ class _MyForm extends State<_MyStatefulWidget> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentContext;
+                      habitBuild.setHabitBuildSatisfying(habitBuildSatisfying);
+                      StoreHabit.saveHabitBuild(habitBuild);
                       Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => MainRoute()));

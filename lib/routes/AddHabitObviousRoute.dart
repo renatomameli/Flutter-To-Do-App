@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:habit_changer/model/build/HabitBuild.dart';
+import 'package:habit_changer/model/build/HabitBuildObvious.dart';
 import 'package:habit_changer/routes/AddHabitAttractiveRoute.dart';
 import 'package:habit_changer/widgets/PaddingStandard.dart';
 
 class AddHabitObviousRoute extends StatelessWidget {
-  final Map<String, String> newHabitFormMap;
+  final HabitBuild habitBuild;
 
-  const AddHabitObviousRoute({Key? key, required this.newHabitFormMap})
+  const AddHabitObviousRoute({Key? key, required this.habitBuild})
       : super(key: key);
 
   @override
@@ -20,30 +22,30 @@ class AddHabitObviousRoute extends StatelessWidget {
             )),
         body: SingleChildScrollView(
           child: _MyStatefulWidget(
-            newHabitFormMap: newHabitFormMap,
+            habitBuild: habitBuild,
           ),
         ));
   }
 }
 
 class _MyStatefulWidget extends StatefulWidget {
-  const _MyStatefulWidget({Key? key, required this.newHabitFormMap})
+  const _MyStatefulWidget({Key? key, required this.habitBuild})
       : super(key: key);
-  final Map<String, String> newHabitFormMap;
+  final HabitBuild habitBuild;
 
   @override
-  State<_MyStatefulWidget> createState() => _MyForm(newHabitFormMap);
+  State<_MyStatefulWidget> createState() => _MyForm(habitBuild);
 }
 
 class _MyForm extends State<_MyStatefulWidget> {
-  _MyForm(this.newHabitFormMap);
+  _MyForm(this.habitBuild);
+
+  late HabitBuild habitBuild = new HabitBuild();
+  late HabitBuildObvious habitBuildObvious = new HabitBuildObvious();
 
   Map<String, String> triggerStimulusMap = {};
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Map<String, String> newHabitFormMap;
-  final Map<String, String> newHabitObviousFormMap = {};
-
   TextEditingController _controller = new TextEditingController();
 
   @override
@@ -58,7 +60,7 @@ class _MyForm extends State<_MyStatefulWidget> {
               child: Row(
             children: [
               Text("I will make the habit: \"" +
-                  newHabitFormMap["name"].toString() +
+                  habitBuild.getName() +
                   "\" at "),
               Expanded(
                 child: TextFormField(
@@ -69,7 +71,7 @@ class _MyForm extends State<_MyStatefulWidget> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter some text';
                     }
-                    newHabitObviousFormMap.putIfAbsent("time", () => value);
+                    habitBuildObvious.setImplementationIntentionAt(value);
                     return null;
                   },
                 ),
@@ -79,7 +81,7 @@ class _MyForm extends State<_MyStatefulWidget> {
           PaddingStandard(
               child: Row(
             children: [
-              Text("in "),
+              Text("in/at "),
               Expanded(
                 child: TextFormField(
                   decoration: const InputDecoration(
@@ -89,8 +91,7 @@ class _MyForm extends State<_MyStatefulWidget> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter some text';
                     }
-                    newHabitObviousFormMap.putIfAbsent(
-                        "habitAfter", () => value);
+                    habitBuildObvious.setImplementationIntentionIn(value);
                     return null;
                   },
                 ),
@@ -102,7 +103,7 @@ class _MyForm extends State<_MyStatefulWidget> {
               child: Row(
             children: [
               Text("After the habit: \"" +
-                  newHabitFormMap["name"].toString() +
+                  habitBuild.getName() +
                   "\" I do the habit: "),
               Expanded(
                 child: TextFormField(
@@ -134,12 +135,15 @@ class _MyForm extends State<_MyStatefulWidget> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentContext;
+                  List<String> triggers = [];
+                  triggerStimulusMap.forEach((k, v) => triggers.add(v));
+                  habitBuildObvious.setTriggers(triggers);
+                  habitBuild.setHabitBuildObvious(habitBuildObvious);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => AddHabitAttractiveRoute(
-                                newHabitObviousFormMap: newHabitObviousFormMap,
-                                triggerStimulusMap: triggerStimulusMap,
+                                habitBuild: habitBuild,
                               )));
                 }
               },
