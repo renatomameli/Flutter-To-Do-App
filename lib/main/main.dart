@@ -49,7 +49,13 @@ class MyApp extends StatelessWidget {
         ],
       ),
       body: Container(
-        child: Text(context.select((FileController controller) => controller.text)),
+        child:  Text(context.select((FileController controller) {
+          if (controller.text==null){
+            return "";
+          }
+          return controller.text!;
+        }
+        )),
       ),
     );
   }

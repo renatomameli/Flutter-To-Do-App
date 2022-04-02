@@ -3,17 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'file_manager.dart';
 
 class FileController extends ChangeNotifier{
-  late String _text;
+  String? _text;
 
-  String get text => _text;
+  String? get text => _text;
 
   readText() async {
-    _text = await FileManager().readTextFile();
+    _text = await FileManager("1.txt").readTextFile();
     notifyListeners();
   }
 
   writeText(String text) async {
-    _text = await FileManager().writeTextFile(text);
+    _text = await FileManager("1.txt").writeTextFile(text);
     notifyListeners();
   }
 }

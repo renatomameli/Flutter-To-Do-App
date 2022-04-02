@@ -4,12 +4,13 @@ import 'package:path_provider/path_provider.dart';
 
 class FileManager {
   static FileManager? _instance;
+  final String fileName;
 
-  FileManager._internal() {
+  FileManager._internal(this.fileName) {
     _instance = this;
   }
 
-  factory FileManager() => _instance ?? FileManager._internal();
+  factory FileManager(String fileName) => _instance ?? FileManager._internal(fileName);
 
   Future<String> get _directoryPath async {
     Directory? dir = await getExternalStorageDirectory();
@@ -18,7 +19,7 @@ class FileManager {
 
   Future<File> get _file async {
     String path = await _directoryPath;
-    return File('$path/fff.txt');
+    return File('$path/'+fileName);
   }
 
   Future<String> readTextFile() async {
@@ -40,4 +41,5 @@ class FileManager {
     await file.writeAsString(text);
     return text;
   }
+
 }
