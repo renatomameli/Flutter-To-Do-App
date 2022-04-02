@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:habit_changer/file-handling/file_controller.dart';
 import 'package:habit_changer/model/build/HabitBuild.dart';
 import 'package:habit_changer/model/build/HabitBuildSatisfying.dart';
 import 'package:habit_changer/widgets/PaddingStandard.dart';
+import 'package:provider/provider.dart';
 
 import '../main/main.dart';
 import 'StoreHabit.dart';
@@ -15,17 +19,20 @@ class AddHabitSatisfyingRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: const Text('Make the habit satisfying'),
-          leading: BackButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )),
-      body: _MyStatefulWidget(
-        habitBuild: habitBuild,
-      ),
+    return MultiProvider(
+        providers: [ChangeNotifierProvider(create: (_) => FileController())],
+        child: MaterialApp(home: Scaffold(
+          appBar: AppBar(
+              title: const Text('Make the habit satisfying'),
+              leading: BackButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )),
+          body: _MyStatefulWidget(
+            habitBuild: habitBuild,
+          ),
+        ))
     );
   }
 }
@@ -48,6 +55,7 @@ class _MyForm extends State<_MyStatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<FileController>().readText();
     return Form(
         key: _formKey,
         child: Column(
@@ -73,9 +81,12 @@ class _MyForm extends State<_MyStatefulWidget> {
                       _formKey.currentContext;
                       habitBuild.setHabitBuildSatisfying(habitBuildSatisfying);
                       StoreHabit.saveHabitBuild(habitBuild);
+                      JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+                      String json = encoder.convert(habitBuild.toJson());
+                      context.read<FileController>().writeText(json);
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MainRoute()));
+                          MaterialPageRoute(builder: (context) => MyApp()));
                     }
                   },
                   child: const Text('Continue'),

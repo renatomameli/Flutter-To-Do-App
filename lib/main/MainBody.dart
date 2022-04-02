@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:habit_changer/model/build/HabitBuild.dart';
 import 'package:habit_changer/widgets/HeaderCard.dart';
 import '../file-handling/HabitStorage.dart';
 import '../model/Habit.dart';
@@ -9,7 +10,8 @@ import '../model/Habit.dart';
 final DateTime nowMinusTwoDays = DateTime.now().subtract(Duration(days: 2));
 
 class HabitBody extends StatefulWidget {
-  const HabitBody();
+  final HabitBuild habitBuild;
+  const HabitBody(this.habitBuild);
 
 
   @override
@@ -18,27 +20,28 @@ class HabitBody extends StatefulWidget {
 
 class _HabitState extends State<HabitBody> {
   String _json = "";
-  late HabitStorage habitStorage = new HabitStorage("");
+  String dir = "";
+  List<FileSystemEntity> files = [];
+  late HabitStorage habitStorage = new HabitStorage("text.txt");
 
   @override
   void initState() {
     super.initState();
-    _createHabit();
-    habitStorage.setFileName("fileName");
+
     habitStorage.readHabitJson().then((String value) {
       setState(() {
         _json = value;
       });
     });
-  }
-
-  Future<File> _createHabit() {
-    setState(() {
-      _json = "NEW HABIT";
+    habitStorage.getLocalPath().then((String value){
+      dir = value;
     });
-
-    return habitStorage.writeHabitJson(_json);
+    habitStorage.getAllFilesDir(dir).then((List<FileSystemEntity> files){
+      this.files = files;
+    });
   }
+
+
 
   @override
   Widget build(BuildContext ctx) {

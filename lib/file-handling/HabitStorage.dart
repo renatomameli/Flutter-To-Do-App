@@ -35,6 +35,15 @@ class HabitStorage {
     }
   }
 
+  Future<String> getLocalPath() {
+    return _localPath;
+  }
+
+  Future<List<FileSystemEntity>> getAllFilesDir(String path) async{
+    final directory = Directory(path);
+    return await directory.list().toList();
+  }
+
   String getFileName() {
     return this.fileName;
   }

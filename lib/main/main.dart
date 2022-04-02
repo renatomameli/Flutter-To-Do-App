@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:habit_changer/file-handling/file_controller.dart';
 import 'package:habit_changer/main/AddHabitDialog.dart';
+import 'package:provider/provider.dart';
 
 import '../utils/Constants.dart';
-import '../file-handling/HabitStorage.dart';
-import '../widgets/MainBody.dart';
+import 'MainBody.dart';
 import 'nav_bar.dart';
 
 void main() {
-  runApp(const MaterialApp(
-    title: 'Habits',
-    home: MainRoute(),
+  runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (_) => FileController())],
+    child: MaterialApp(home: MyApp())
   ));
 }
 
-class MainRoute extends StatelessWidget {
-  const MainRoute({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    context.read<FileController>().readText();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Habits'),
@@ -37,7 +39,8 @@ class MainRoute extends StatelessWidget {
               onTap: () {
                 showDialog(
                   context: context,
-                  builder: (BuildContext context) => AddHabitDialog().buildPopupDialog(context),
+                  builder: (BuildContext context) =>
+                      AddHabitDialog().buildPopupDialog(context),
                 );
               },
               child: Icon(Icons.add),
@@ -45,8 +48,9 @@ class MainRoute extends StatelessWidget {
           )
         ],
       ),
-      body: HabitBody(),
+      body: Container(
+        child: Text(context.select((FileController controller) => controller.text)),
+      ),
     );
   }
 }
-
