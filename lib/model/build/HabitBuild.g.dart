@@ -8,7 +8,7 @@ part of 'HabitBuild.dart';
 
 HabitBuild _$HabitBuildFromJson(Map<String, dynamic> json) {
   return HabitBuild()
-    ..id = json['id'] as int?
+    ..id = json['id'] as String?
     ..name = json['name'] as String
     ..question = json['question'] as String
     ..notes = json['notes'] as String?
