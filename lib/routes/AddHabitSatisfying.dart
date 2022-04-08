@@ -1,14 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:habit_changer/file-handling/file_controller.dart';
+import 'package:habit_changer/file-handling/file_manager.dart';
+import 'package:habit_changer/main/main.dart';
 import 'package:habit_changer/model/build/HabitBuild.dart';
 import 'package:habit_changer/model/build/HabitBuildSatisfying.dart';
 import 'package:habit_changer/widgets/PaddingStandard.dart';
-import 'package:provider/provider.dart';
-
-import '../main/main.dart';
-import 'StoreHabit.dart';
 
 class AddHabitSatisfyingRoute extends StatelessWidget {
   final HabitBuild habitBuild;
@@ -19,9 +17,7 @@ class AddHabitSatisfyingRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [ChangeNotifierProvider(create: (_) => FileController())],
-        child: MaterialApp(home: Scaffold(
+    return MaterialApp(home: Scaffold(
           appBar: AppBar(
               title: const Text('Make the habit satisfying'),
               leading: BackButton(
@@ -30,17 +26,18 @@ class AddHabitSatisfyingRoute extends StatelessWidget {
                 },
               )),
           body: _MyStatefulWidget(
-            habitBuild: habitBuild,
+            habitBuild: habitBuild, fileManager: FileManager(),
           ),
-        ))
+        )
     );
   }
 }
 
 class _MyStatefulWidget extends StatefulWidget {
-  const _MyStatefulWidget({Key? key, required this.habitBuild})
+  const _MyStatefulWidget({Key? key, required this.habitBuild, required this.fileManager})
       : super(key: key);
   final HabitBuild habitBuild;
+  final FileManager fileManager;
 
   @override
   State<_MyStatefulWidget> createState() => _MyForm(habitBuild);
@@ -52,10 +49,27 @@ class _MyForm extends State<_MyStatefulWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final HabitBuild habitBuild;
   final HabitBuildSatisfying habitBuildSatisfying = new HabitBuildSatisfying();
+  String _value = "";
+
+  @override
+  void initState() {
+    super.initState();
+    widget.fileManager.readFile().then((String value) {
+      setState(() {
+        _value = value;
+      });
+    });
+  }
+
+  Future<File> saveFile(String value) {
+    setState(() {
+      _value = value;
+    });
+    return widget.fileManager.writeFile(_value);
+  }
 
   @override
   Widget build(BuildContext context) {
-    context.read<FileController>().readText();
     return Form(
         key: _formKey,
         child: Column(
@@ -78,20 +92,44 @@ class _MyForm extends State<_MyStatefulWidget> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      _formKey.currentContext;
                       habitBuild.setHabitBuildSatisfying(habitBuildSatisfying);
-                      StoreHabit.saveHabitBuild(habitBuild);
-                      JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-                      String json = encoder.convert(habitBuild.toJson());
-                      context.read<FileController>().writeText(json);
+                      saveNewHabitBuild();
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MyApp()));
+                          MaterialPageRoute(builder: (context) => HomeScreen(fileManager: FileManager())));
                     }
                   },
                   child: const Text('Continue'),
                 ),
               ),
             ]));
+  }
+
+  void saveNewHabitBuild() {
+    String oldJsonString = _value.replaceAll("\\", "");
+
+
+    Map<String, dynamic> habitBuildMap = {};
+    try{
+      oldJsonString = oldJsonString.substring(1, oldJsonString.length-1);
+      Map<String, dynamic> habitMap = json.decode(oldJsonString);
+      habitBuildMap = habitMap["habitBuildMap"];
+    } catch(e){
+      print("No Habits saved or invalid JSON Format");
+    }
+
+    String newId = _generateId(habitBuildMap);
+    habitBuild.setId(newId);
+    habitBuildMap.putIfAbsent(newId, () => habitBuild);
+
+    Map<String, dynamic> newHabitMap = {};
+    newHabitMap.putIfAbsent("habitBuildMap", () => habitBuildMap);
+    String jsonString = json.encode(newHabitMap);
+    saveFile(json.encode(jsonString));
+  }
+
+  String _generateId(Map<String, dynamic> habitMap){
+    List<String> keys = habitMap.keys.toList();
+    return keys.length.toString();
   }
 }

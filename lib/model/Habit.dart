@@ -1,5 +1,5 @@
 abstract class Habit {
-  int? id;
+  String? id;
   late String name;
   late String question;
   String? notes;
@@ -7,7 +7,7 @@ abstract class Habit {
 
   Habit();
 
-  void setId(int id){this.id = id;}
+  void setId(String id){this.id = id;}
   void setName(String name){this.name = name;}
   void setQuestion(String question){this.question = question;}
   void setNotes(String notes){this.notes = notes;}

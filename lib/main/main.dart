@@ -1,29 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:habit_changer/file-handling/file_controller.dart';
-import 'package:habit_changer/main/AddHabitDialog.dart';
-import 'package:provider/provider.dart';
+import 'package:habit_changer/file-handling/file_manager.dart';
+import 'package:habit_changer/main/MainBody.dart';
 
-import '../utils/Constants.dart';
-import 'MainBody.dart';
+import 'AddHabitDialog.dart';
 import 'nav_bar.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => FileController())],
-    child: MaterialApp(home: MyApp())
-  ));
+  runApp(
+    MaterialApp(
+      title: 'Habits',
+      home: HomeScreen(fileManager: FileManager()),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key, required this.fileManager}) : super(key: key);
+
+  final FileManager fileManager;
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String _value = "";
+
+  @override
+  void initState() {
+    super.initState();
+    widget.fileManager.readFile().then((String value) {
+      setState(() {
+        _value = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    context.read<FileController>().readText();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Habits'),
-        backgroundColor: Constants.appBarColor,
         leading: GestureDetector(
           onTap: () {
             openNavBar();
@@ -48,9 +65,7 @@ class MyApp extends StatelessWidget {
           )
         ],
       ),
-      body: Container(
-        child: Text(context.select((FileController controller) => controller.text)),
-      ),
+      body: Center(child: Text('$_value')),
     );
   }
 }

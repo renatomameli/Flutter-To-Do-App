@@ -3,9 +3,9 @@ part 'HabitBuildAttractive.g.dart';
 
 @JsonSerializable()
 class HabitBuildAttractive {
-  late String advantages;
-  late String environment;
-  late String enjoyable;
+  late String? advantages;
+  late String? environment;
+  late String? enjoyable;
 
   HabitBuildAttractive();
 
