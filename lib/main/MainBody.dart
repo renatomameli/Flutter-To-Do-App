@@ -3,23 +3,33 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:habit_changer/model/build/HabitBuild.dart';
 import 'package:habit_changer/widgets/HeaderCard.dart';
+import '../file-handling/file_manager.dart';
 import '../model/Habit.dart';
 
 
 final DateTime nowMinusTwoDays = DateTime.now().subtract(Duration(days: 2));
 
 class HabitBody extends StatefulWidget {
-  final String jsonValue;
-  const HabitBody(this.jsonValue);
+  const HabitBody(this.fileManager);
+  final FileManager fileManager;
 
 
   @override
-  _HabitState createState() => _HabitState(jsonValue);
+  _HabitState createState() => _HabitState();
 }
 
 class _HabitState extends State<HabitBody> {
-  _HabitState(this.jsonValue);
-  final String jsonValue;
+  String _value = "";
+
+  @override
+  void initState() {
+    super.initState();
+    widget.fileManager.readFile().then((String value) {
+      setState(() {
+        _value = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext ctx) {
@@ -27,9 +37,9 @@ class _HabitState extends State<HabitBody> {
   }
 
   List<Card> buildCards() {
-    print(jsonValue);
+    print(_value);
     List<Card> cards = [HeaderCard()];
-    fromJsonToHabits(jsonValue).forEach((element) {
+    fromJsonToHabits(_value).forEach((element) {
       cards.add(new Card(
           child: ListTile(
               title: Text(element.name),
