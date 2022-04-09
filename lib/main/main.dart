@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: Center(child: Text('$_value')),
+      body: Center(child: HabitBody(FileManager())),
     );
   }
 }
