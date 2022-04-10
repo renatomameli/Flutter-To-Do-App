@@ -130,6 +130,11 @@ class _MyForm extends State<_MyStatefulWidget> {
 
   String _generateId(Map<String, dynamic> habitMap){
     List<String> keys = habitMap.keys.toList();
+    for(int i = 0; i<keys.length; i++){
+      if(keys[i]!=i.toString()){
+        return i.toString();
+      }
+    }
     return keys.length.toString();
   }
 }
