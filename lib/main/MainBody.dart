@@ -20,7 +20,7 @@ class HabitBody extends StatefulWidget {
 
 class _HabitState extends State<HabitBody> {
   String _value = "";
-  List<HabitBuild> _habitBuildList = [];
+  Map<String, HabitBuild> _habitBuildMap = {};
 
   @override
   void initState() {
@@ -28,37 +28,42 @@ class _HabitState extends State<HabitBody> {
     widget.fileManager.readFile().then((String value) {
       setState(() {
         _value = value;
-        _habitBuildList = fromJsonToHabits();
+        _habitBuildMap = fromJsonToHabits();
       });
     });
   }
 
   @override
   Widget build(BuildContext ctx) {
+    _habitBuildMap = _habitBuildMap;
     return ListView(children: buildCards());
   }
 
   List<Widget> buildCards() {
     print(_value);
     List<Widget> cards = [HeaderCard()];
-    _habitBuildList.forEach((element) {
+    _habitBuildMap.forEach((key, habitBuild) {
       cards.add(
         Dismissible(
-          key: ValueKey<String>(element.id!),
+          key: ValueKey<String>(key),
           child: Card(
               child: ListTile(
-                  title: Text(element.name),
+                  title: Text(habitBuild.name),
                   trailing: Wrap(
-                      spacing: 19.5, children: getTrueOrFalseIcons(element)),
-                  onLongPress: () {
+                      spacing: 19.5, children: getTrueOrFalseIcons(habitBuild)),
+                  onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => HabitDetails()));
-                  })),
+                  },
+                onLongPress: () {
+                    print("HI");
+                },
+              )),
           onDismissed: (DismissDirection direction) {
             setState(() {
-              deleteHabit(element);
+              deleteHabit(habitBuild);
             });
           },
         ),
@@ -67,7 +72,7 @@ class _HabitState extends State<HabitBody> {
     return cards;
   }
 
-  List<HabitBuild> fromJsonToHabits() {
+  Map<String, HabitBuild> fromJsonToHabits() {
     String oldJsonString = _value.replaceAll("\\", "");
 
     Map<String, dynamic> habitBuildMap = {};
@@ -79,11 +84,11 @@ class _HabitState extends State<HabitBody> {
     } catch (e) {
       print("No Habits saved or invalid JSON Format");
     }
-    List<HabitBuild> habits = [];
+    Map<String, HabitBuild> newHabitBuildMap = {};
     habitBuildMap.forEach((key, value) {
-      habits.add(HabitBuild.fromJson(value));
+      newHabitBuildMap.putIfAbsent(key, () => HabitBuild.fromJson(value));
     });
-    return habits;
+    return newHabitBuildMap;
   }
 
   List<Widget> getTrueOrFalseIcons(Habit habit) {
@@ -96,7 +101,7 @@ class _HabitState extends State<HabitBody> {
               .substring(0, 10))) {
         icons.add(Container(
             padding: const EdgeInsets.all(0.0),
-            width: 30.0,
+            width: 24.0,
             child:
             IconButton(
               icon: Icon(
@@ -104,7 +109,11 @@ class _HabitState extends State<HabitBody> {
                 color: Colors.green,
               ),
               padding: EdgeInsets.zero,
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  changeSuccessAtDate(habit.id!, i, false);
+                });
+              },
             ))
         );
       } else {
@@ -112,15 +121,19 @@ class _HabitState extends State<HabitBody> {
             padding: const EdgeInsets.all(0.0),
             width: 24.0,
             child: IconButton(icon: Icon(Icons.clear, color: Colors.red),
-          padding: EdgeInsets.zero,
-          onPressed: () {  },)));
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                setState(() {
+                  changeSuccessAtDate(habit.id!, i, true);
+                });
+              },)));
       }
     }
     return icons;
   }
 
   void deleteHabit(HabitBuild element) {
-    _habitBuildList.removeAt(_habitBuildList.indexOf(element));
+    _habitBuildMap.remove(element.id);
 
     String oldJsonString = _value.replaceAll("\\", "");
 
@@ -137,14 +150,46 @@ class _HabitState extends State<HabitBody> {
     Map<String, dynamic> newHabitMap = {};
     newHabitMap.putIfAbsent("habitBuildMap", () => habitBuildMap);
 
-    String newJson = jsonEncode(newHabitMap);
-    _value = newJson;
+    String newJson = json.encode(newHabitMap);
+    _value = json.encode(newJson);
     widget.fileManager.writeFile(json.encode(newJson));
   }
 
-  void changeSuccessAtDate(String id, int position){
-    setState(() {
+  void changeSuccessAtDate(String id, int position, bool activate) {
+    String oldJsonString = _value.replaceAll("\\", "");
+    oldJsonString = oldJsonString.substring(1, oldJsonString.length - 1);
 
+    Map<String, dynamic> habitMap = json.decode(oldJsonString);
+    Map<String, dynamic> habitBuildMap = habitMap["habitBuildMap"];
+    Map<String, HabitBuild> newHabitBuildMap = {};
+    habitBuildMap.forEach((key, value) {
+      newHabitBuildMap.putIfAbsent(key, () => HabitBuild.fromJson(value));
     });
+
+    String value = nowMinusTwoDays.add(Duration(days: position))
+        .toIso8601String()
+        .substring(0, 10);
+    if(activate==true){
+      if (newHabitBuildMap[id]?.successAtDate != null) {
+        newHabitBuildMap[id]?.successAtDate!.add(value);
+      } else {
+        newHabitBuildMap[id]?.setSuccessAtDate([value]);
+      }
+    } else {
+      if (newHabitBuildMap[id]?.successAtDate != null) {
+        newHabitBuildMap[id]!.successAtDate!.remove(value);
+      }
+    }
+
+
+    Map<String, dynamic> newHabitMap = {};
+    newHabitMap.putIfAbsent("habitBuildMap", () => newHabitBuildMap);
+
+    _habitBuildMap = newHabitBuildMap;
+    String newJson = json.encode(newHabitMap);
+    _value = json.encode(newJson);
+    widget.fileManager.writeFile(json.encode(newJson));
   }
+
+
 }
